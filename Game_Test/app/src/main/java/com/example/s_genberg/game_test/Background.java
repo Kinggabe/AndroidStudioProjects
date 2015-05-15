@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class Background {
-    p    rivate Bitmap image;
+    private Bitmap image;
     private int x, y, dx;
 
     public Background(Bitmap res) {
