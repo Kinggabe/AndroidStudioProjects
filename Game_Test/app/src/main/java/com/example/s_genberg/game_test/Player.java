@@ -53,7 +53,7 @@ public class Player extends GameObject{
             dy = -14;
         }
         y += dy*2;
-        dy = 0;
+        
     }
     public void draw(Canvas canvas) {
     canvas.drawBitmap(animation.getImage(), x, y, null);

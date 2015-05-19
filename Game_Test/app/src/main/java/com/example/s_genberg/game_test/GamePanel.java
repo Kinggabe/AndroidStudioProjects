@@ -54,15 +54,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.bgg));
-<<<<<<< HEAD
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicopter), 65, 25, 3);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicoptercopy), 65, 25, 3);
         smoke = new ArrayList<Smokepuff>();
 
         smokeStartTimer = System.nanoTime();
 
-=======
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicoptercopy), 65, 25, 3);
->>>>>>> origin/master
+       // player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicoptercopy), 65, 25, 3);
     // if created safe start game loop
         thread.setRunning(true);
         thread.start();
@@ -93,6 +90,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             long elapsed = (System.nanoTime() - smokeStartTimer)/1000000;
             if(elapsed > 120) {
                 smoke.add(new Smokepuff(player.getX(), player.getY()+10));
+                smokeStartTimer = System.nanoTime();
+            }
+            for(int i = 0; i < smoke.size(); i++) {
+                smoke.get(i).update();
+                if(smoke.get(i).getX()<-10) {
+                    smoke.remove(i);
+                }
             }
         }
 
@@ -107,6 +111,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
             player.draw(canvas);
+            for(Smokepuff sp: smoke) {
+                sp.draw(canvas);
+            }
             canvas.restoreToCount(savedState);
         }
     }
