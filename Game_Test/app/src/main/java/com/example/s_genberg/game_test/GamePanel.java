@@ -54,11 +54,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.bgg));
+<<<<<<< HEAD
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicopter), 65, 25, 3);
         smoke = new ArrayList<Smokepuff>();
 
         smokeStartTimer = System.nanoTime();
 
+=======
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicoptercopy), 65, 25, 3);
+>>>>>>> origin/master
     // if created safe start game loop
         thread.setRunning(true);
         thread.start();
