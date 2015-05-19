@@ -7,15 +7,19 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public static final int WIDTH = 856;
     public static int HEIGHT = 480;
     public static final int MOVESPEED = -5;
+    private long smokeStartTimer;
     private MainThread thread;
     private Background bg;
     private Player player;
+    private ArrayList<Smokepuff> smoke;
     public GamePanel(Context context) {
         super(context);
 
@@ -35,19 +39,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder holder) {
     //
         boolean retry = true;
-        while(retry) {
+        int counter = 0;
+        while(retry && counter < 1000) {
+            counter++;
             try{thread.setRunning(false);
             thread.join();
+                retry = false;
             }catch(Exception e) {
                 e.printStackTrace();
             }
-            retry = false;
+
         }
     }
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.bgg));
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicopter), 65, 25, 3);
+        smoke = new ArrayList<Smokepuff>();
+
+        smokeStartTimer = System.nanoTime();
+
     // if created safe start game loop
         thread.setRunning(true);
         thread.start();
@@ -75,6 +86,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if(player.getPlayering()) {
             bg.update();
             player.update();
+            long elapsed = (System.nanoTime() - smokeStartTimer)/1000000;
+            if(elapsed > 120) {
+                smoke.add(new Smokepuff(player.getX(), player.getY()+10));
+            }
         }
 
 
