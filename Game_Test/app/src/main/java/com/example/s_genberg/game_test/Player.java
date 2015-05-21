@@ -28,7 +28,7 @@ public class Player extends GameObject{
         }
 
         animation.setFrames(image);
-        animation.setDelay(10);
+        animation.setDelay(100); // DELAY
         startTime = System.nanoTime();
     }
     public void setUp(boolean b) {
@@ -59,7 +59,7 @@ public class Player extends GameObject{
     canvas.drawBitmap(animation.getImage(), x, y, null);
     }
     public int getScore() {return score;}
-    public boolean getPlayering() {return playing;}
+    public boolean getPlaying() {return playing;}
     public void setPlaying(boolean b){playing = b;}
     public void resetDY() {dy = 0;}
     public void resetScore() {score = 0;}
