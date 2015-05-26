@@ -22,7 +22,7 @@ public class Player extends GameObject{
         width = w;
 
         Bitmap[] image = new Bitmap[numFrames];
-        spritesheet = res; //http://www.youpak.com/watch?v=dzyP7iNSYFQ
+        spritesheet = res;
 
         for(int i = 0; i < image.length; i++) {
             image[i] = Bitmap.createBitmap(spritesheet, i*width, 0, width, height);
