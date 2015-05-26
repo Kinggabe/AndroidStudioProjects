@@ -16,7 +16,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 {
     public static final int WIDTH = 1712;
     public static final int HEIGHT = 960;
-    public static final int MOVESPEED = -5;
+    public static int MOVESPEED = -5; //EDIT
     private long smokeStartTime;
     private long missileStartTime;
     private MainThread thread;
@@ -112,7 +112,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             //add missiles on timer
             long missileElapsed = (System.nanoTime()-missileStartTime)/1000000;
             if(missileElapsed >(2000 - player.getScore()/4)){
-                
+
+
                 //first missile always goes down the middle
                 if(missiles.size()==0)
                 {
