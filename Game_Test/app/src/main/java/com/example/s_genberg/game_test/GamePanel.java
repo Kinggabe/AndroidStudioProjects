@@ -112,8 +112,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             //add missiles on timer
             long missileElapsed = (System.nanoTime()-missileStartTime)/1000000;
             if(missileElapsed >(2000 - player.getScore()/4)){
-
-                System.out.println("making missile");
+                
                 //first missile always goes down the middle
                 if(missiles.size()==0)
                 {
