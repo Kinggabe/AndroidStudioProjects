@@ -45,6 +45,8 @@ public class Player extends GameObject{
             dy -= 1;
         } else if(down){  //changed from else by gabe
             dy += 1;
+        } else {  //changed by gabe
+            dy += 1;
         }
         if(dy > 14) {
             dy = 14;
