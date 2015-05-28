@@ -24,8 +24,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private Player player;
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Missile> missiles;
+    private ArrayList<TopBorder> topBorder;
+    private ArrayList<BottomBorder> bottomBorder;
     private Random rand = new Random();
-
+    private int maxBorderHeight;
+    private int minBorderHeight;
+    private boolean topDown = true;
+    private boolean botDown = true;
+    //increase difficulty
+    private int progressDenom = 20;
 
     public GamePanel(Context context)
     {
@@ -64,10 +71,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder){
 
-        bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.animebag), 1712, 960, 2);
+        bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.animebag));
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicopter), 65, 25, 3);
         smoke = new ArrayList<Smokepuff>();
         missiles = new ArrayList<Missile>();
+        topBorder = new ArrayList<TopBorder>();
+        bottomBorder = new ArrayList<BottomBorder>();
         smokeStartTime=  System.nanoTime();
         missileStartTime = System.nanoTime();
 
@@ -79,8 +88,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     }
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction()==MotionEvent.ACTION_DOWN){
             if(!player.getPlaying())
             {
@@ -101,13 +109,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         return super.onTouchEvent(event);
     }
 
-    public void update()
-
-    {
+    public void update() {
         if(player.getPlaying()) {
 
             bg.update();
             player.update();
+            //calculate the threshold of the height the border can have based on the score
+            //max and min border heart are updated and the border and
+            maxBorderHeight = 30+player.getScore()/progressDenom;
+            //cap map border height
+            if(maxBorderHeight>HEIGHT/4) {
+                maxBorderHeight = HEIGHT/4;
+
+            }
+            minBorderHeight = 5+player.getScore()/progressDenom;
+
+            //create boarders
+            //top
+            this.updateTopBorder();
+            //bottom
+            this.updateBottomBorder();
 
             //add missiles on timer
             long missileElapsed = (System.nanoTime()-missileStartTime)/1000000;
@@ -171,7 +192,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
     public boolean collision(GameObject a, GameObject b)
     {
-        if(Rect.intersects(a.getRectangle(),b.getRectangle()))
+        if(Rect.intersects(a.getRectangle(), b.getRectangle()))
         {
             return true;
         }
@@ -210,6 +231,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             canvas.restoreToCount(savedState);
         }
     }
+
+    public void updateBottomBorder() {
+        //every 50 points insert block
+        if(player.getScore()%50 == 0) {
+    topBorder.add(new TopBorder(BitmapFactory.decodeResource(getResources(),R.drawable.brick),topBorder.get(topBorder.size()-1).getX()+20), 0,(int)((rand.nextDouble()*(maxBorderHeight))));
+        }
+//HHHHHERERERE EPPP 7
+    }
+    public void updateTopBorder() {
+        //
+
+
+    }
+
 
 
 }
