@@ -19,8 +19,6 @@ public class Background {
         for(int i = 0; i < image.length; i++) {
             image[i] = Bitmap.createBitmap(spritesheet, i*w, 0, w, h);
         }
-        animation.setFrames(image);
-        animation.setDelay(100); // DELAY
         startTime = System.nanoTime();
     }
     public void update() {
