@@ -25,6 +25,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Missile> missiles;
     private Random rand = new Random();
+    public boolean playin;
 
 
     public GamePanel(Context context)
@@ -64,7 +65,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder){
 
-        bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.animebag), 1712, 960, 2);
+        bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.animatedbackgroundfour), 1712, 960, 4);
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.helicopter), 65, 25, 3);
         smoke = new ArrayList<Smokepuff>();
         missiles = new ArrayList<Missile>();
@@ -101,12 +102,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         return super.onTouchEvent(event);
     }
 
-    public void update()
+    public void update() {
 
-    {
+        playin = player.getPlaying();
         if(player.getPlaying()) {
-
             bg.update();
+
             player.update();
 
             //add missiles on timer
