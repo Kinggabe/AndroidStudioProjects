@@ -65,6 +65,7 @@ public class Player extends GameObject{
     public void setPlaying(boolean b){playing = b;}
     public void resetDY() {dy = 0;}
     public void resetScore() {score = 0;}
+    public void setDownSpeed() {dy = 0;}
 
 
 }
