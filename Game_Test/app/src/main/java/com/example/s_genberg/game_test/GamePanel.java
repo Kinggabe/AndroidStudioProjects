@@ -82,12 +82,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         rightButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.right));
         jumpButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.jump));
         shootButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.shoot));
-        /*
-        leftButton
-        rightButton
-        jumpButton
-        shootButton
-        */
+
+        leftButton.setX(HEIGHT/2);
+
+        //leftButton.setX(HEIGHT-10);
+        rightButton.setX(HEIGHT-10);
+        jumpButton.setX(HEIGHT-10);
+        shootButton.setX(HEIGHT-10);
+
+        leftButton.setY(WIDTH/2);
+
+        //leftButton.setY(2);
+        rightButton.setY(400);
+        jumpButton.setY(WIDTH-10);
+        shootButton.setY(WIDTH-400);
+
         smokeStartTime=  System.nanoTime();
         missileStartTime = System.nanoTime();
 
@@ -183,6 +192,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
             player.draw(canvas);
+            leftButton.draw(canvas);
+            rightButton.draw(canvas);
+            jumpButton.draw(canvas);
+            shootButton.draw(canvas);
             //draw smokepuffs
             for(Smokepuff sp: smoke)
             {
