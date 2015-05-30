@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,21 +16,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 {
     public static final int WIDTH = 1712;
     public static final int HEIGHT = 960;
-    public static final int MOVESPEED = -5;
+    public static int MOVESPEED = -5;
+    public static final int PLAYER_SPAWN = HEIGHT-90;
     private long smokeStartTime;
     private long missileStartTime;
     private MainThread thread;
     private Background bg;
     private Player player;
+    private ImageButton leftButton;
+    private ImageButton rightButton;
+    private ImageButton jumpButton;
+    private ImageButton shootButton;
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Border> border;
-    private ArrayList<TopBorder> topborder;
-    private ArrayList<BotBorder> botborder;
     private Random rand = new Random();
-    private int maxBorderHeight;
-    private int minBorderHeight;
-    private boolean topDown = true;
-    private boolean botDown = true;
     private boolean newGameCreated;
     //increase to slow down difficulty progression, decrease to speed up difficulty progression
     private int progressDenom = 20;
@@ -74,8 +74,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.mainchar), 90, 160, 3);
         smoke = new ArrayList<Smokepuff>();
         border = new ArrayList<Border>();
-        topborder = new ArrayList<TopBorder>();
-        botborder = new ArrayList<BotBorder>();
+        leftButton = new ImageButton(getContext());
+        rightButton = new ImageButton(getContext());
+        jumpButton = new ImageButton(getContext());
+        shootButton = new ImageButton(getContext());
+        leftButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.left));
+        rightButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.right));
+        jumpButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.jump));
+        shootButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.shoot));
+        /*
+        leftButton
+        rightButton
+        jumpButton
+        shootButton
+        */
         smokeStartTime=  System.nanoTime();
         missileStartTime = System.nanoTime();
 
