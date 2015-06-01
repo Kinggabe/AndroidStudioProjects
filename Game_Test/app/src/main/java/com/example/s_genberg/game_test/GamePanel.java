@@ -108,7 +108,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+
         if(event.getAction()==MotionEvent.ACTION_DOWN){
+            if(event.getX() > 0 && event.getX() < 400) {
+                if(event.getY() > 700 && event.getY() < 960) {
+                    System.out.println("Bottom Right Button");
+                    player.setX(player.getX()+20);
+                }
+            }
             if(!player.getPlaying())
             {
                 player.setPlaying(true);
@@ -133,15 +140,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     {
         if(player.getPlaying()) {
-
+            System.out.println("playing");
             bg.update();
             player.update();
-
-            //calculate the threshold of height the border can have based on the score
-            //max and min border heart are updated, and the border switched direction when either max or
-            //min is met
-
-
 
             if(player.getY() == 90) {
                 player.setDownSpeed();
@@ -244,6 +245,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 border.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.grass),i*30,930));
             }
         }
+
         newGameCreated = true;
     }
 
