@@ -1,5 +1,4 @@
 package com.example.s_genberg.game_test;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
