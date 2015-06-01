@@ -8,6 +8,7 @@ public class Player extends GameObject{
     private Bitmap spritesheet;
     private int score;
     private boolean up;
+    private boolean down; //added by gabe
     private boolean playing;
     private Animation animation = new Animation();
     private long startTime;
@@ -32,6 +33,7 @@ public class Player extends GameObject{
         startTime = System.nanoTime();
     }
     public void setUp(boolean b) {up = b;}
+    public void setDown(boolean d) {down = d;} // added by gabe
     public void update() {
         long elapsed = (System.nanoTime()-startTime)/1000000;
         if(elapsed> 100) {
@@ -41,7 +43,9 @@ public class Player extends GameObject{
         animation.update();
         if(up) {
             dy -= 1;
-        } else {
+        } else if(down){  //changed from else by gabe
+            dy += 1;
+        } else {  //changed by gabe
             dy += 1;
         }
         if(dy > 14) {
@@ -51,7 +55,7 @@ public class Player extends GameObject{
             dy = -14;
         }
         y += dy*2;
-
+        
     }
     public void draw(Canvas canvas) {
     canvas.drawBitmap(animation.getImage(), x, y, null);
