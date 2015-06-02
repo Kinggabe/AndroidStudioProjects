@@ -74,10 +74,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         border = new ArrayList<Border>();
         dirt1 = new ArrayList<Border>();
         dirt2 = new ArrayList<Border>();
-        leftButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.left),BitmapFactory.decodeResource(getResources(), R.drawable.leftpress), 300, 150, 1, 10, 750);
-        rightButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.right),BitmapFactory.decodeResource(getResources(), R.drawable.rightpress), 300, 150, 1, 500, 750);
-        jumpButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.jump),BitmapFactory.decodeResource(getResources(), R.drawable.jumppress), 300, 150, 1, 1400, 750);
-        shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot),BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 200, 200, 1, 1420, 400);
+        leftButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.left),BitmapFactory.decodeResource(getResources(), R.drawable.leftpress), 300, 150, 1, 10, 800);
+        rightButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.right),BitmapFactory.decodeResource(getResources(), R.drawable.rightpress), 300, 150, 1, 350, 800);
+        jumpButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.jump),BitmapFactory.decodeResource(getResources(), R.drawable.jumppress), 300, 150, 1, 1400, 800);
+        shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot),BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 200, 200, 1, 1480, 550);
 
         smokeStartTime=  System.nanoTime();
         missileStartTime = System.nanoTime();
@@ -90,31 +90,48 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event)
     {
         if(event.getAction()==MotionEvent.ACTION_DOWN) {
-            System.out.println("CLICK!!");
             if(!player.getPlaying()) {
-                System.out.println("X: "+event.getX()+"Y: "+event.getY());
                 player.setPlaying(true);
-                if(event.getX() > 0 && event.getX() < 400) {
-                    if(event.getY() < 960 && event.getY() > 700) {
-                        System.out.println("Bottom Left");
+                if(event.getX() > 10 && event.getX() < 300) {
+                    if(event.getY() < 950 && event.getY() > 800) {
+                        System.out.println("LEFT");
                     }
                 }
-                if(event.getX() > 1500 && event.getX() < 1712) {
-                    if(event.getY() < 960 && event.getY() > 700) {
-                        System.out.println("Bottom Right");
+                if(event.getX() > 350 && event.getX() < 650) {
+                    if(event.getY() < 950 && event.getY() > 800) {
+                        System.out.println("RIGHT");
+                    }
+                }
+                if(event.getX() > 1400 && event.getX() < 1700) {
+                    if(event.getY() < 950 && event.getY() > 800) {
+                        System.out.println("JUMP");
+                    }
+                }
+                if(event.getX() > 1480 && event.getX() < 300) {
+                    if(event.getY() < 750 && event.getY() > 550) {
+                        System.out.println("SHOOT");
                     }
                 }
             }
             else {
-                System.out.println("X: "+event.getX()+"Y: "+event.getY());
-                if(event.getX() > 0 && event.getX() < 400) {
-                    if(event.getY() < 960 && event.getY() > 700) {
-                        System.out.println("Bottom Left");
+                if(event.getX() > 10 && event.getX() < 300) {
+                    if(event.getY() < 950 && event.getY() > 800) {
+                        System.out.println("LEFT");
                     }
                 }
-                if(event.getX() > 1500 && event.getX() < 1712) {
-                    if(event.getY() < 960 && event.getY() > 700) {
-                        System.out.println("Bottom Right");
+                if(event.getX() > 350 && event.getX() < 650) {
+                    if(event.getY() < 950 && event.getY() > 800) {
+                        System.out.println("RIGHT");
+                    }
+                }
+                if(event.getX() > 1400 && event.getX() < 1700) {
+                    if(event.getY() < 950 && event.getY() > 800) {
+                        System.out.println("JUMP");
+                    }
+                }
+                if(event.getX() > 1480 && event.getX() < 300) {
+                    if(event.getY() < 750 && event.getY() > 550) {
+                        System.out.println("SHOOT");
                     }
                 }
             }
@@ -242,7 +259,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         player.resetSpeed();
         player.resetScore();
-        player.setY(HEIGHT-360);
+        player.setY(HEIGHT-340);
 
         //initial border
         for(int i = 0; i*20<WIDTH+60;i++)
