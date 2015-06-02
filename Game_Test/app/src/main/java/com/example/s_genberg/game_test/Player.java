@@ -7,8 +7,10 @@ import android.graphics.Canvas;
 public class Player extends GameObject{
     private Bitmap spritesheet;
     private int score;
-    private boolean left;
-    private boolean right;
+    public boolean left;
+    public boolean right;
+    public boolean shooting;
+    public boolean jumping;
     private boolean playing;
     private int speed;
     private int distanceTraveled;
@@ -23,6 +25,8 @@ public class Player extends GameObject{
         score = 0;
         height = h;
         width = w;
+        shooting = false;
+        jumping = false;
         distanceTraveled = 0;
 
         Bitmap[] image = new Bitmap[numFrames];
@@ -45,6 +49,9 @@ public class Player extends GameObject{
             startTime = System.nanoTime();
         }
         animation.update();
+        if(shooting) {
+
+        }
         if(left) {
             speed = 5;
                 distanceTraveled-=2;

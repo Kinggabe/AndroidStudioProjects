@@ -95,21 +95,25 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 if(event.getX() > 10 && event.getX() < 300) {
                     if(event.getY() < 950 && event.getY() > 800) {
                         System.out.println("LEFT");
+                        leftButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 350 && event.getX() < 650) {
                     if(event.getY() < 950 && event.getY() > 800) {
                         System.out.println("RIGHT");
+                        rightButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 1400 && event.getX() < 1700) {
                     if(event.getY() < 950 && event.getY() > 800) {
                         System.out.println("JUMP");
+                        jumpButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 1480 && event.getX() < 300) {
                     if(event.getY() < 750 && event.getY() > 550) {
                         System.out.println("SHOOT");
+                        shootButton.setPressed(true);
                     }
                 }
             }
@@ -117,21 +121,25 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 if(event.getX() > 10 && event.getX() < 300) {
                     if(event.getY() < 950 && event.getY() > 800) {
                         System.out.println("LEFT");
+                        leftButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 350 && event.getX() < 650) {
                     if(event.getY() < 950 && event.getY() > 800) {
                         System.out.println("RIGHT");
+                        rightButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 1400 && event.getX() < 1700) {
                     if(event.getY() < 950 && event.getY() > 800) {
                         System.out.println("JUMP");
+                        jumpButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 1480 && event.getX() < 300) {
                     if(event.getY() < 750 && event.getY() > 550) {
                         System.out.println("SHOOT");
+                        shootButton.setPressed(true);
                     }
                 }
             }
@@ -139,6 +147,30 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
         if(event.getAction()==MotionEvent.ACTION_UP)
         {
+            if(event.getX() > 10 && event.getX() < 300) {
+                if(event.getY() < 950 && event.getY() > 800) {
+                    System.out.println("LEFT");
+                    leftButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 350 && event.getX() < 650) {
+                if(event.getY() < 950 && event.getY() > 800) {
+                    System.out.println("RIGHT");
+                    rightButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 1400 && event.getX() < 1700) {
+                if(event.getY() < 950 && event.getY() > 800) {
+                    System.out.println("JUMP");
+                    jumpButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 1480 && event.getX() < 300) {
+                if (event.getY() < 750 && event.getY() > 550) {
+                    System.out.println("SHOOT");
+                    shootButton.setPressed(false);
+                }
+            }
             return true;
         }
         return super.onTouchEvent(event);
@@ -146,9 +178,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public void update()
     {
         if(player.getPlaying()) {
-                System.out.println("PLAYING!!");
+            System.out.println("PLAYING!!");
             bg.update();
             player.update();
+            leftButton.update();
+            rightButton.update();
+            jumpButton.update();
+            shootButton.update();
+            if(leftButton.getPress()) {player.left = true;} else {player.left = false;}
+            if(rightButton.getPress()) {player.right = true;} else {player.right = false;}
+            if(jumpButton.getPress()) {player.jumping = true;}
+            if(shootButton.getPress()) {player.shooting = true;} else {player.shooting = false;}
+
             //BORDERS AKA Ground !! !! !!  !!  !!  !!  !!  !!  !! !!
             this.Updateborder();
             //add smoke puffs on timer

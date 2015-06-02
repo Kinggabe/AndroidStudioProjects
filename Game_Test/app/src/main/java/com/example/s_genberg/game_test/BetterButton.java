@@ -36,6 +36,11 @@ public class BetterButton extends GameObject{
             }
         }
     }
+    public void update() {
+        animation.update();
+
+    }
     public boolean getPress() {return pressed;}
     public void setVisible(boolean v) {Visible = v;}
+    public void setPressed(boolean v) {pressed = v;}
 }
