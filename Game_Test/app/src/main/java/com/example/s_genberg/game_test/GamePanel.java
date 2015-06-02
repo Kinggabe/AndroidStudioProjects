@@ -23,10 +23,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private MainThread thread;
     private Background bg;
     private Player player;
-    private ImageButton leftButton;
-    private ImageButton rightButton;
-    private ImageButton jumpButton;
-    private ImageButton shootButton;
+    private BetterButton leftButton;
+    private BetterButton rightButton;
+    private BetterButton jumpButton;
+    private BetterButton shootButton;
     private ArrayList<Smokepuff> smoke;
     private ArrayList<Border> border;
     private ArrayList<Border> dirt2;
@@ -41,12 +41,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     {
         super(context);
 
-
         //add the callback to the surfaceholder to intercept events
         getHolder().addCallback(this);
-
         thread = new MainThread(getHolder(), this);
-
         //make gamePanel focusable so it can handle events
         setFocusable(true);
     }
@@ -67,42 +64,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
             }catch(InterruptedException e){e.printStackTrace();}
         }
-
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground));
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.mainchar), 90, 160, 3);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.cowregular), 90, 160, 3);
         smoke = new ArrayList<Smokepuff>();
         border = new ArrayList<Border>();
         dirt1 = new ArrayList<Border>();
         dirt2 = new ArrayList<Border>();
-        leftButton = new ImageButton(getContext());
-        rightButton = new ImageButton(getContext());
-        jumpButton = new ImageButton(getContext());
-        shootButton = new ImageButton(getContext());
-        leftButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.left));
-        rightButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.right));
-        jumpButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.jump));
-        shootButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.shoot));
-
-
-
-        leftButton.setX(HEIGHT - 10);
-        rightButton.setX(HEIGHT - 10);
-        jumpButton.setX(HEIGHT - 10);
-        shootButton.setX(HEIGHT - 10);
-
-        leftButton.setY(2);
-        rightButton.setY(400);
-        jumpButton.setY(WIDTH - 10);
-        shootButton.setY(WIDTH - 400);
-
-        leftButton.setEnabled(true);
-        rightButton.setEnabled(true);
-        jumpButton.setEnabled(true);
-        shootButton.setEnabled(true);
+        leftButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.left),BitmapFactory.decodeResource(getResources(), R.drawable.leftpress), 300, 200, 1, 10, 900);
+        rightButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.right),BitmapFactory.decodeResource(getResources(), R.drawable.rightpress), 300, 200, 1, 500, 900);
+        jumpButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.jump),BitmapFactory.decodeResource(getResources(), R.drawable.jumppress), 300, 200, 1, 1400, 900);
+        shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot),BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 300, 300, 1, 1420, 600);
 
         smokeStartTime=  System.nanoTime();
         missileStartTime = System.nanoTime();
@@ -110,7 +85,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
-
     }
     @Override
     public boolean onTouchEvent(MotionEvent event)
@@ -118,11 +92,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         if(event.getAction()==MotionEvent.ACTION_DOWN) {
             System.out.println("CLICK!!");
             if(!player.getPlaying()) {
+                System.out.println("X: "+event.getX()+"Y: "+event.getY());
                 player.setPlaying(true);
-                player.setUp(true);
+                if(event.getX() > 0 && event.getX() < 400) {
+                    if(event.getY() < 960 && event.getY() > 700) {
+                        System.out.println("Bottom Left");
+                    }
+                }
+                if(event.getX() > 1500 && event.getX() < 1712) {
+                    if(event.getY() < 960 && event.getY() > 700) {
+                        System.out.println("Bottom Right");
+                    }
+                }
             }
             else {
-                player.setUp(true);
+                System.out.println("X: "+event.getX()+"Y: "+event.getY());
+                if(event.getX() > 0 && event.getX() < 400) {
+                    if(event.getY() < 960 && event.getY() > 700) {
+                        System.out.println("Bottom Left");
+                    }
+                }
+                if(event.getX() > 1500 && event.getX() < 1712) {
+                    if(event.getY() < 960 && event.getY() > 700) {
+                        System.out.println("Bottom Right");
+                    }
+                }
             }
             return true;
         }
@@ -132,27 +126,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
         return super.onTouchEvent(event);
     }
-
     public void update()
     {
         if(player.getPlaying()) {
                 System.out.println("PLAYING!!");
             bg.update();
             player.update();
-            if(player.getY() == 90) {
-                player.setDownSpeed();
-            }
-
             //BORDERS AKA Ground !! !! !!  !!  !!  !!  !!  !!  !! !!
             this.Updateborder();
-
             //add smoke puffs on timer
             long elapsed = (System.nanoTime() - smokeStartTime)/1000000;
             if(elapsed > 120){
                 smoke.add(new Smokepuff(player.getX(), player.getY()+10));
                 smokeStartTime = System.nanoTime();
             }
-
             for(int i = 0; i<smoke.size();i++)
             {
                 smoke.get(i).update();
@@ -188,10 +175,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
             player.draw(canvas);
-            leftButton.draw(canvas);
-            rightButton.draw(canvas);
-            jumpButton.draw(canvas);
-            shootButton.draw(canvas);
+
             //draw smokepuffs
             for(Smokepuff sp: smoke)
             {
@@ -210,23 +194,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             {
                 b.draw(canvas);
             }
+            leftButton.draw(canvas);
+            rightButton.draw(canvas);
+            jumpButton.draw(canvas);
+            shootButton.draw(canvas);
             canvas.restoreToCount(savedState);
         }
     }
 
 
     public void Updateborder() {
-        /*
-        for(Border b : border) {
-            if(b.getX() <= 1020 && b.getX() >= WIDTH) {
-                border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grass), WIDTH + 60, 870));
-                System.out.println("BORDER GRASS");
-            }
-        }
-        */
         for(int i = 0; i < border.size(); i++) {
-            if(border.get(i).getX() <=1020 && border.get(i+1) == null) {
-                border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grass), WIDTH + 60, 870));
+            if(border.get(i).getX() <=1140 && border.get(i+1) == null) {
+                border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), WIDTH + 120, 780));
                 System.out.println("BORDER GRASS");
             }
             if(border.get(i).getX() < -1) {
@@ -234,10 +214,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 System.out.println("BORDER REMOVE GRASS");
             }
         }
-
         for(int i = 0; i < dirt1.size(); i++) {
-            if(dirt1.get(i).getX() <=1020 && dirt1.get(i + 1) == null) {
-                dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirt),WIDTH+60,900));
+            if(dirt1.get(i).getX() <=1140 && dirt1.get(i + 1) == null) {
+                dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirtmedium),WIDTH+120,840));
                 System.out.println("BORDER DIRT");
             }
             if(dirt1.get(i).getX() < -1) {
@@ -245,10 +224,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 System.out.println("BORDER REMOVE");
             }
         }
-
         for(int i = 0; i < dirt2.size(); i++) {
-            if(dirt2.get(i).getX() <=1020 && dirt2.get(i+1) == null) {
-                dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirt), WIDTH + 60, 930));
+            if(dirt2.get(i).getX() <=1140 && dirt2.get(i+1) == null) {
+                dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), WIDTH + 120, 900));
                 System.out.println("BORDER DIRT #2");
             }
             if(dirt2.get(i).getX() < -1) {
@@ -263,9 +241,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         dirt2.clear();
         smoke.clear();
 
-        player.resetDY();
+        player.resetSpeed();
         player.resetScore();
-        player.setY(HEIGHT-320);
+        player.setY(HEIGHT-360);
 
         //initial border
         for(int i = 0; i*20<WIDTH+60;i++)
@@ -273,16 +251,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             //first top border create
             if(i==0)
             {
-                border.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.grass),i*30,870));
-                dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirt),i*30,900));
-                dirt2.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirt),i*30,930));
+                border.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.grassmedium),i*60,780));
+                dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirtmedium),i*60,840));
+                dirt2.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirtmedium),i*60,900));
                 System.out.println("STARTBORDER");
             }
             else
             {
-                border.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.grass),i*30,870));
-                dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirt),i*30,900));
-                dirt2.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirt),i*30,930));
+                border.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.grassmedium),i*60,780));
+                dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirtmedium),i*60,840));
+                dirt2.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirtmedium),i*60,900));
             }
         }
         newGameCreated = true;

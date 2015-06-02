@@ -7,19 +7,23 @@ import android.graphics.Canvas;
 public class Player extends GameObject{
     private Bitmap spritesheet;
     private int score;
-    private boolean up;
-    private boolean down; //added by gabe
+    private boolean left;
+    private boolean right;
     private boolean playing;
+    private int speed;
+    private int distanceTraveled;
     private Animation animation = new Animation();
     private long startTime;
+
 
     public Player(Bitmap res, int w, int h, int numFrames) {
         x = 100;
         y = GamePanel.PLAYER_SPAWN;
-        dy = 0;
+        speed = -5;
         score = 0;
         height = h;
         width = w;
+        distanceTraveled = 0;
 
         Bitmap[] image = new Bitmap[numFrames];
         spritesheet = res;
@@ -32,8 +36,8 @@ public class Player extends GameObject{
         animation.setDelay(100); // DELAY
         startTime = System.nanoTime();
     }
-    public void setUp(boolean b) {up = b;}
-    public void setDown(boolean d) {down = d;} // added by gabe
+    public void setRight(boolean b) {right = b;}
+    public void setLeft(boolean d) {left = d;}
     public void update() {
         long elapsed = (System.nanoTime()-startTime)/1000000;
         if(elapsed> 100) {
@@ -41,21 +45,15 @@ public class Player extends GameObject{
             startTime = System.nanoTime();
         }
         animation.update();
-        if(up) {
-            dy -= 1;
-        } else if(down){  //changed from else by gabe
-            dy += 1;
-        } else {  //changed by gabe
-            dy += 1;
+        if(left) {
+            speed = 5;
+                distanceTraveled-=2;
         }
-        if(dy > 14) {
-            dy = 14;
+        if(right) {
+            speed = -5;
+            distanceTraveled+=2;
         }
-        if(dy < -14) {
-            dy = -14;
-        }
-        y += dy*2;
-        
+        GamePanel.MOVESPEED = speed;
     }
     public void draw(Canvas canvas) {
     canvas.drawBitmap(animation.getImage(), x, y, null);
@@ -63,11 +61,10 @@ public class Player extends GameObject{
     public int getScore() {return score;}
     public boolean getPlaying() {return playing;}
     public void setPlaying(boolean b){playing = b;}
-    public void resetDY() {dy = 0;}
+    public void resetSpeed() {speed = 0;}
     public void resetScore() {score = 0;}
-    public void setDownSpeed() {dy = 0;}
+    public void setDistanceTraveled(int j) {distanceTraveled = j;}
+    public int getDistanceTraveled() {return distanceTraveled;}
 
 
 }
-
-

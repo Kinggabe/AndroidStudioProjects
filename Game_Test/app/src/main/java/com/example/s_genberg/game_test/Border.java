@@ -7,8 +7,8 @@ import android.graphics.Canvas;
 public class Border extends GameObject {
     private Bitmap image;
     public Border(Bitmap res, int x, int y) {
-        height = 30;
-        width = 30;
+        height = 60;
+        width = 60;
         this.x = x;
         this.y = y;
 
