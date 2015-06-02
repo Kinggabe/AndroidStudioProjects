@@ -69,15 +69,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground));
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.cowregular), 90, 160, 3);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.maincow), 90, 160, 5);
         smoke = new ArrayList<Smokepuff>();
         border = new ArrayList<Border>();
         dirt1 = new ArrayList<Border>();
         dirt2 = new ArrayList<Border>();
-        leftButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.left),BitmapFactory.decodeResource(getResources(), R.drawable.leftpress), 300, 200, 1, 10, 900);
-        rightButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.right),BitmapFactory.decodeResource(getResources(), R.drawable.rightpress), 300, 200, 1, 500, 900);
-        jumpButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.jump),BitmapFactory.decodeResource(getResources(), R.drawable.jumppress), 300, 200, 1, 1400, 900);
-        shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot),BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 300, 300, 1, 1420, 600);
+        leftButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.left),BitmapFactory.decodeResource(getResources(), R.drawable.leftpress), 300, 200, 1, 10, 750);
+        rightButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.right),BitmapFactory.decodeResource(getResources(), R.drawable.rightpress), 300, 200, 1, 500, 750);
+        jumpButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.jump),BitmapFactory.decodeResource(getResources(), R.drawable.jumppress), 300, 200, 1, 1400, 750);
+        shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot),BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 300, 300, 1, 1420, 400);
 
         smokeStartTime=  System.nanoTime();
         missileStartTime = System.nanoTime();
@@ -137,7 +137,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             //add smoke puffs on timer
             long elapsed = (System.nanoTime() - smokeStartTime)/1000000;
             if(elapsed > 120){
-                smoke.add(new Smokepuff(player.getX(), player.getY()+10));
+                smoke.add(new Smokepuff(player.getX(), player.getY()+60));
                 smokeStartTime = System.nanoTime();
             }
             for(int i = 0; i<smoke.size();i++)
@@ -175,7 +175,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
             player.draw(canvas);
-
             //draw smokepuffs
             for(Smokepuff sp: smoke)
             {
