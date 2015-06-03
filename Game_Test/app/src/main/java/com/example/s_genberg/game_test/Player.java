@@ -55,21 +55,19 @@ public class Player extends GameObject{
             score++;
             startTime = System.nanoTime();
         }
-        /*
         if(jumping) {
-            y-=4;
-            long jumpElapsed = (System.nanoTime()-jumpstartTime)/1000000;
-            if(elapsed > 500) {
+            if(y != 400) {
+                y-=4;
+            } else {
                 jumping = false;
-                jumpstartTime = System.nanoTime();
-            }
-        }
-        else {
-            if(y == (GamePanel.HEIGHT-339)) {
                 y+=4;
             }
         }
-        */
+        else {
+            if(y <= 620) {
+                y+=4;
+            }
+        }
         animation.update();
         if(shooting) {
             System.out.println("BUllet");
