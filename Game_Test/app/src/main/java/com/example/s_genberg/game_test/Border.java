@@ -6,12 +6,13 @@ import android.graphics.Canvas;
 
 public class Border extends GameObject {
     private Bitmap image;
+    private int speed;
     public Border(Bitmap res, int x, int y) {
         height = 60;
         width = 60;
         this.x = x;
         this.y = y;
-
+        speed = 0;
         dx = GamePanel.MOVESPEED;
         image = Bitmap.createBitmap(res, 0, 0, width, height);
     }
@@ -22,6 +23,7 @@ public class Border extends GameObject {
         }
     }
     public void update() {
-        x+=dx;
+        speed = GamePanel.MOVESPEED;
+        x+=speed;
     }
 }

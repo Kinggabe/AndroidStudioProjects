@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 public class Background {
 
     private Bitmap image;
-    private int x, y, dx;
+    private int x, y, speed;
 
     public Background(Bitmap res)
     {
@@ -13,7 +13,8 @@ public class Background {
     }
     public void update()
     {
-        x+=dx;
+        speed = GamePanel.MOVESPEED;
+        x+=speed;
         if(x<-GamePanel.WIDTH){
             x=0;
         }
@@ -28,6 +29,6 @@ public class Background {
     }
     public void setVector(int dx)
     {
-        this.dx = dx;
+        speed = dx;
     }
 }

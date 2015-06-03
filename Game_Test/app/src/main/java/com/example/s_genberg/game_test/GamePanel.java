@@ -19,7 +19,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public static int MOVESPEED = -5;
     public static final int PLAYER_SPAWN = HEIGHT-90;
     private long smokeStartTime;
-    private long missileStartTime;
+    private int shootingStartTime;
     private MainThread thread;
     private Background bg;
     private Player player;
@@ -69,7 +69,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground));
-        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.maincow), 90, 160, 5);
+        player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.maincow), 90, 160, 5,
+                BitmapFactory.decodeResource(getResources(), R.drawable.bullet),BitmapFactory.decodeResource(getResources(), R.drawable.bullethit));
         smoke = new ArrayList<Smokepuff>();
         border = new ArrayList<Border>();
         dirt1 = new ArrayList<Border>();
@@ -80,7 +81,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot),BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 200, 200, 1, 1480, 550);
 
         smokeStartTime=  System.nanoTime();
-        missileStartTime = System.nanoTime();
+            shootingStartTime = 1;
 
         //we can safely start the game loop
         thread.setRunning(true);
@@ -92,85 +93,57 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         if(event.getAction()==MotionEvent.ACTION_DOWN) {
             if(!player.getPlaying()) {
                 player.setPlaying(true);
-                if(event.getX() > 10 && event.getX() < 300) {
-                    if(event.getY() < 950 && event.getY() > 800) {
-                        System.out.println("LEFT");
+                if(event.getX() > 0 && event.getX() < 300) {
+                    if(event.getY() > 850) {
                         leftButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 350 && event.getX() < 650) {
-                    if(event.getY() < 950 && event.getY() > 800) {
-                        System.out.println("RIGHT");
+                    if(event.getY() > 850) {
                         rightButton.setPressed(true);
                     }
                 }
-                if(event.getX() > 1400 && event.getX() < 1700) {
-                    if(event.getY() < 950 && event.getY() > 800) {
-                        System.out.println("JUMP");
+                if(event.getX() > 1555) {
+                    if(event.getY() > 850) {
                         jumpButton.setPressed(true);
                     }
                 }
-                if(event.getX() > 1480 && event.getX() < 300) {
-                    if(event.getY() < 750 && event.getY() > 550) {
-                        System.out.println("SHOOT");
+                if(event.getX() > 1630) {
+                    if(event.getY() < 800 && event.getY() > 570) {
                         shootButton.setPressed(true);
                     }
                 }
             }
             else {
+                System.out.println("X:"+event.getX()+"Y:"+event.getY());
                 if(event.getX() > 10 && event.getX() < 300) {
-                    if(event.getY() < 950 && event.getY() > 800) {
-                        System.out.println("LEFT");
+                    if(event.getY() > 850) {
                         leftButton.setPressed(true);
                     }
                 }
                 if(event.getX() > 350 && event.getX() < 650) {
-                    if(event.getY() < 950 && event.getY() > 800) {
-                        System.out.println("RIGHT");
+                    if(event.getY() > 850) {
                         rightButton.setPressed(true);
                     }
                 }
-                if(event.getX() > 1400 && event.getX() < 1700) {
-                    if(event.getY() < 950 && event.getY() > 800) {
-                        System.out.println("JUMP");
+                if(event.getX() > 1555) {
+                    if(event.getY() > 850) {
                         jumpButton.setPressed(true);
                     }
                 }
-                if(event.getX() > 1480 && event.getX() < 300) {
-                    if(event.getY() < 750 && event.getY() > 550) {
-                        System.out.println("SHOOT");
+                if(event.getX() > 1630) {
+                    if(event.getY() < 800 && event.getY() > 570) {
                         shootButton.setPressed(true);
                     }
                 }
             }
             return true;
         }
-        if(event.getAction()==MotionEvent.ACTION_UP)
-        {
-            if(event.getX() > 10 && event.getX() < 300) {
-                if(event.getY() < 950 && event.getY() > 800) {
-                    System.out.println("LEFT");
+        if(event.getAction()==MotionEvent.ACTION_UP) {
                     leftButton.setPressed(false);
-                }
-            }
-            if(event.getX() > 350 && event.getX() < 650) {
-                if(event.getY() < 950 && event.getY() > 800) {
-                    System.out.println("RIGHT");
                     rightButton.setPressed(false);
-                }
-            }
-            if(event.getX() > 1400 && event.getX() < 1700) {
-                if(event.getY() < 950 && event.getY() > 800) {
-                    System.out.println("JUMP");
                     jumpButton.setPressed(false);
-                }
-            }
-            if(event.getX() > 1480 && event.getX() < 300) {
-                if (event.getY() < 750 && event.getY() > 550) {
-                    System.out.println("SHOOT");
                     shootButton.setPressed(false);
-                }
-            }
             return true;
         }
         return super.onTouchEvent(event);
@@ -188,7 +161,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             if(leftButton.getPress()) {player.left = true;} else {player.left = false;}
             if(rightButton.getPress()) {player.right = true;} else {player.right = false;}
             if(jumpButton.getPress()) {player.jumping = true;}
-            if(shootButton.getPress()) {player.shooting = true;} else {player.shooting = false;}
+            if(shootButton.getPress()) {
+                if(shootingStartTime == 1) {player.shooting = true;shootingStartTime++;}else{shootingStartTime++;if(shootingStartTime == 10) {shootingStartTime = 1;}}
+            } else {player.shooting = false; shootingStartTime = 1;}
 
             //BORDERS AKA Ground !! !! !!  !!  !!  !!  !!  !!  !! !!
             this.Updateborder();
@@ -261,27 +236,24 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 
     public void Updateborder() {
-        for(int i = 0; i < border.size(); i++) {
+        for(int i = 0; i < border.size()-1; i++) {
             if(border.get(i).getX() <=1140 && border.get(i+1) == null) {
                 border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), WIDTH + 120, 780));
-                System.out.println("BORDER GRASS");
             }
             if(border.get(i).getX() < -1) {
                 border.remove(i);
-                System.out.println("BORDER REMOVE GRASS");
             }
         }
-        for(int i = 0; i < dirt1.size(); i++) {
+        for(int i = 0; i < dirt1.size()-1; i++) {
             if(dirt1.get(i).getX() <=1140 && dirt1.get(i + 1) == null) {
                 dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirtmedium),WIDTH+120,840));
-                System.out.println("BORDER DIRT");
             }
             if(dirt1.get(i).getX() < -1) {
                 dirt1.remove(i);
                 System.out.println("BORDER REMOVE");
             }
         }
-        for(int i = 0; i < dirt2.size(); i++) {
+        for(int i = 0; i < dirt2.size()-1; i++) {
             if(dirt2.get(i).getX() <=1140 && dirt2.get(i+1) == null) {
                 dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), WIDTH + 120, 900));
                 System.out.println("BORDER DIRT #2");
@@ -290,6 +262,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 dirt2.remove(i);
                 System.out.println("BORDER REMOVE DIRT #2");
             }
+        }
+
+        for(Border b: border)
+        {
+            b.update();
+        }
+        for(Border b: dirt1)
+        {
+            b.update();
+        }
+        for(Border b: dirt2)
+        {
+            b.update();
         }
     }
     public void newGame() {

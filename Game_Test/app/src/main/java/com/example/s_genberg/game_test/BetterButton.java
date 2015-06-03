@@ -9,12 +9,14 @@ public class BetterButton extends GameObject{
     private Animation animation = new Animation();
     private boolean pressed;
     private boolean Visible;
+    private int speed;
     private Bitmap pressedres;
     public BetterButton(Bitmap res, Bitmap pressedres, int w, int h, int numFrames, int x, int y) {
         height = h;
         width = w;
         this.x = x;
         this.y = y;
+        speed = 0;
         Visible = true;
         pressed = false;
         this.pressedres = pressedres;
@@ -37,6 +39,7 @@ public class BetterButton extends GameObject{
         }
     }
     public void update() {
+        speed = GamePanel.MOVESPEED;
         animation.update();
 
     }
