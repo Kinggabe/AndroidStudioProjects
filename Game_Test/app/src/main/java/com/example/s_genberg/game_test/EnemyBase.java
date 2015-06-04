@@ -1,11 +1,14 @@
 package com.example.s_genberg.game_test;
+
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-public class Player extends GameObject{
+
+/**
+ * Created by s-genberg on 6/4/2015.
+ */
+public class EnemyBase extends GameObject {
     private Bitmap spritesheet;
     private int score;
     public int leftmax;
@@ -26,7 +29,7 @@ public class Player extends GameObject{
     private Bitmap bullet;
     private Bitmap bulletexplode;
 
-    public Player(Bitmap res, int w, int h, int numFrames, Bitmap bullet, Bitmap bulletexplode, Bitmap[] healthB) {
+    public EnemyBase(Bitmap res, int w, int h, int numFrames, Bitmap bullet, Bitmap bulletexplode, Bitmap[] healthB) {
         x = 100;
         y = GamePanel.PLAYER_SPAWN;
         speed = -5;
@@ -87,74 +90,49 @@ public class Player extends GameObject{
             }
         }
         if(left) {
-            speed = speed+2;
+            speed+=2;
             if(speed >= 6) {
                 speed = 6;
-            } if(speed ==8) {
-                speed = 6;
             }
-            System.out.println("Speed:"+speed);
-                distanceTraveled-=1;
-        } else if(!left) {
-            speed = speed-2;
+            distanceTraveled-=1;
+        } else if(!left){
+            speed-=2;
             if(speed <= 0) {
                 speed = 0;
             }
-        } if(right) {
-            speed = speed-2;
-            if(speed == -2) {
-                speed = -4;
-            } if(speed == -4) {
-                speed = -6;
-            }
-
-            System.out.println("SPED"+speed);
+        }
+        if(right) {
+            speed -= 2;
             if(speed <= -6) {
                 speed = -6;
             }
-            distanceTraveled+=1;
-        } else if(!right){
-            System.out.println("N #");
-            speed = speed+2;
-            if(!left) {
-                if (speed >= 0) {
-                    speed = 0;
-                }
+            distanceTraveled+=2;
+        } else if(!right) {
+            speed+=2;
+            if(speed >= 0) {
+                speed = 0;
             }
         }
         GamePanel.MOVESPEED = speed;
-        System.out.println("Distance:"+distanceTraveled+" Speed:"+speed);
+        System.out.println(distanceTraveled);
     }
     public void draw(Canvas canvas) {
         if(health == 100) {
-            borderhealth.changeImage(healthbar[10]);
-        } else if(health == 90) {
-            borderhealth.changeImage(healthbar[9]);
-        } else if(health == 80) {
-            borderhealth.changeImage(healthbar[8]);
-        } else if(health == 70) {
-            borderhealth.changeImage(healthbar[7]);
-        } else if(health == 60) {
-            borderhealth.changeImage(healthbar[6]);
-        } else if(health == 50) {
-            borderhealth.changeImage(healthbar[5]);
-        } else if(health == 40) {
-            borderhealth.changeImage(healthbar[4]);
-        } else if(health == 30) {
-            borderhealth.changeImage(healthbar[3]);
-        } else if(health == 20) {
-            borderhealth.changeImage(healthbar[2]);
-        } else if(health == 10) {
-            borderhealth.changeImage(healthbar[1]);
-        } else if(health == 0) {
             borderhealth.changeImage(healthbar[0]);
-            setPlaying(false);
+        } else if(health >= 60) {
+            borderhealth.changeImage(healthbar[1]);
+        } else if(health >= 40) {
+            borderhealth.changeImage(healthbar[2]);
+        } else if(health >= 20) {
+            borderhealth.changeImage(healthbar[3]);
+        } else if(health >= 0) {
+            borderhealth.changeImage(healthbar[4]);
         }
-    borderhealth.draw(canvas);
+        borderhealth.draw(canvas);
         for(bullets b: Arraybullets) {
             b.draw(canvas);
         }
-    canvas.drawBitmap(animation.getImage(), x, y, null);
+        canvas.drawBitmap(animation.getImage(), x, y, null);
     }
     public int getScore() {return score;}
     public boolean getPlaying() {return playing;}
@@ -166,6 +144,7 @@ public class Player extends GameObject{
     public void setLeft(int l) {leftmax = l;}
     public void damaged() {health-=10; if(health < 0) {health = 0;}}
     public int getHealth() {return health;}
+
 
 
 
