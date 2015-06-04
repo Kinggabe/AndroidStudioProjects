@@ -1,12 +1,12 @@
 package com.example.s_genberg.game_test;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,6 +31,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     private ArrayList<Border> border;
     private ArrayList<Border> dirt2;
     private ArrayList<Border> dirt1;
+    private Bitmap[] healthbar;
     private Random rand = new Random();
     private boolean newGameCreated;
     //increase to slow down difficulty progression, decrease to speed up difficulty progression
@@ -68,10 +69,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder holder){
+        healthbar = new Bitmap[11];
+        healthbar[0] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar11);
+        healthbar[1] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar10);
+        healthbar[2] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar9);
+        healthbar[3] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar8);
+        healthbar[4] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar7);
+        healthbar[5] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar6);
+        healthbar[6] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar5);
+        healthbar[7] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar4);
+        healthbar[8] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar3);
+        healthbar[9] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar2);
+        healthbar[10] = BitmapFactory.decodeResource(getResources(), R.drawable.healthbar);
         bg = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.mainbackground));
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.maincow), 90, 160, 5,
-                BitmapFactory.decodeResource(getResources(), R.drawable.bullet),BitmapFactory.decodeResource(getResources(), R.drawable.bullethit));
+                BitmapFactory.decodeResource(getResources(), R.drawable.bullet),BitmapFactory.decodeResource(getResources(), R.drawable.bullethit), healthbar);
         smoke = new ArrayList<Smokepuff>();
+
         border = new ArrayList<Border>();
         dirt1 = new ArrayList<Border>();
         dirt2 = new ArrayList<Border>();
@@ -79,6 +93,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         rightButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.right),BitmapFactory.decodeResource(getResources(), R.drawable.rightpress), 300, 150, 1, 350, 800);
         jumpButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.jump),BitmapFactory.decodeResource(getResources(), R.drawable.jumppress), 300, 150, 1, 1400, 800);
         shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot),BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 200, 200, 1, 1480, 550);
+
 
         smokeStartTime=  System.nanoTime();
             shootingStartTime = 1;
@@ -170,7 +185,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             //add smoke puffs on timer
             long elapsed = (System.nanoTime() - smokeStartTime)/1000000;
             if(elapsed > 120){
-                smoke.add(new Smokepuff(player.getX(), player.getY()+60));
+                smoke.add(new Smokepuff(player.getX(), player.getY()+100));
                 smokeStartTime = System.nanoTime();
             }
             for(int i = 0; i<smoke.size();i++)
@@ -236,32 +251,44 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
 
     public void Updateborder() {
+        //TOP GRASS
         for(int i = 0; i < border.size()-1; i++) {
-            if(border.get(i).getX() <=1140 && border.get(i+1) == null) {
-                border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), WIDTH + 120, 780));
-            }
-            if(border.get(i).getX() < -1) {
+            if(border.get(i).getX() < -120) {
                 border.remove(i);
             }
         }
+        if(border.get(border.size()-1).getX() <= 1832) {
+            border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), border.get(border.size()-1).getX()+60, 780));
+            System.out.println("ADD");
+        }
+        //MID DIRT
         for(int i = 0; i < dirt1.size()-1; i++) {
             if(dirt1.get(i).getX() <=1140 && dirt1.get(i + 1) == null) {
                 dirt1.add(new Border(BitmapFactory.decodeResource(getResources(),R.drawable.dirtmedium),WIDTH+120,840));
             }
-            if(dirt1.get(i).getX() < -1) {
+            if(dirt1.get(i).getX() < -120) {
                 dirt1.remove(i);
                 System.out.println("BORDER REMOVE");
             }
         }
+        if(dirt1.get(dirt1.size()-1).getX() <= 1832) {
+            dirt1.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), dirt1.get(dirt1.size()-1).getX()+60, 780));
+            System.out.println("ADD");
+        }
+        //BOTTOM DIRT
         for(int i = 0; i < dirt2.size()-1; i++) {
             if(dirt2.get(i).getX() <=1140 && dirt2.get(i+1) == null) {
                 dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), WIDTH + 120, 900));
                 System.out.println("BORDER DIRT #2");
             }
-            if(dirt2.get(i).getX() < -1) {
+            if(dirt2.get(i).getX() < -120) {
                 dirt2.remove(i);
                 System.out.println("BORDER REMOVE DIRT #2");
             }
+        }
+        if(dirt2.get(dirt2.size()-1).getX() <= 1832) {
+            dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), dirt2.get(dirt2.size()-1).getX()+60, 780));
+            System.out.println("ADD");
         }
 
         for(Border b: border)

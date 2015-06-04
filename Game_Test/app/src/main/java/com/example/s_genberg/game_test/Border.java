@@ -26,4 +26,6 @@ public class Border extends GameObject {
         speed = GamePanel.MOVESPEED;
         x+=speed;
     }
+    public int getX() {return x;}
+    public void changeImage(Bitmap b) {image = Bitmap.createBitmap(b, 0, 0, width, height);}
 }
