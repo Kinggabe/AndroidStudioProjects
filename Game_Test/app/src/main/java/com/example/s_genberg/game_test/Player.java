@@ -35,7 +35,7 @@ public class Player extends GameObject{
         width = w;
         health = 100;
         healthbar = healthB;
-        borderhealth = new HealthBar(healthB[0], 800, 800);
+        borderhealth = new HealthBar(healthB[0], 700, 800);
         this.bullet = bullet;
         this.bulletexplode = bulletexplode;
         shooting = false;
@@ -87,41 +87,58 @@ public class Player extends GameObject{
             }
         }
         if(left) {
-            speed = 5;
-                distanceTraveled-=2;
+            speed+=2;
+            if(speed >= 6) {
+                speed = 5;
+            }
+                distanceTraveled-=1;
+        } else {
+            speed-=2;
+            if(speed <= 0) {
+                speed = 0;
+            }
         }
         if(right) {
-            speed = -5;
+            speed -= 2;
+            if(speed <= -6) {
+                speed = -6;
+            }
             distanceTraveled+=2;
+        } else {
+            speed+=2;
+            if(speed >= 0) {
+                speed = 0;
+            }
         }
         GamePanel.MOVESPEED = speed;
+        System.out.println(distanceTraveled);
     }
     public void draw(Canvas canvas) {
         if(health == 100) {
-            borderhealth.changeImage(healthbar[0]);
+            borderhealth.changeImage(healthbar[10]);
         } else if(health == 90) {
-            borderhealth.changeImage(healthbar[1]);
+            borderhealth.changeImage(healthbar[9]);
         } else if(health == 80) {
-            borderhealth.changeImage(healthbar[2]);
+            borderhealth.changeImage(healthbar[8]);
         } else if(health == 70) {
-            borderhealth.changeImage(healthbar[3]);
+            borderhealth.changeImage(healthbar[7]);
         } else if(health == 60) {
-            borderhealth.changeImage(healthbar[4]);
+            borderhealth.changeImage(healthbar[6]);
         } else if(health == 50) {
             borderhealth.changeImage(healthbar[5]);
         } else if(health == 40) {
-            borderhealth.changeImage(healthbar[6]);
+            borderhealth.changeImage(healthbar[4]);
         } else if(health == 30) {
-            borderhealth.changeImage(healthbar[7]);
+            borderhealth.changeImage(healthbar[3]);
         } else if(health == 20) {
-            borderhealth.changeImage(healthbar[8]);
+            borderhealth.changeImage(healthbar[2]);
         } else if(health == 10) {
-            borderhealth.changeImage(healthbar[9]);
+            borderhealth.changeImage(healthbar[1]);
         } else if(health == 0) {
-            borderhealth.changeImage(healthbar[10]);
+            borderhealth.changeImage(healthbar[0]);
             setPlaying(false);
         }
-        borderhealth.draw(canvas);
+    borderhealth.draw(canvas);
         for(bullets b: Arraybullets) {
             b.draw(canvas);
         }

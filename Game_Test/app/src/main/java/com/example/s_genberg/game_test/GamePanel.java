@@ -7,10 +7,8 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
 import java.util.ArrayList;
 import java.util.Random;
-
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 {
@@ -105,7 +103,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
+            handleTouch(event);
         if(event.getAction()==MotionEvent.ACTION_DOWN) {
+            System.out.println("PRESS");
             if(!player.getPlaying()) {
                 player.setPlaying(true);
                 if(event.getX() > 0 && event.getX() < 300) {
@@ -130,7 +130,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
                 }
             }
             else {
-                System.out.println("X:"+event.getX()+"Y:"+event.getY());
                 if(event.getX() > 10 && event.getX() < 300) {
                     if(event.getY() > 850) {
                         leftButton.setPressed(true);
@@ -222,7 +221,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
             bg.draw(canvas);
-            player.draw(canvas);
+
             //draw smokepuffs
             for(Smokepuff sp: smoke)
             {
@@ -245,8 +244,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             rightButton.draw(canvas);
             jumpButton.draw(canvas);
             shootButton.draw(canvas);
+            player.draw(canvas);
             canvas.restoreToCount(savedState);
         }
+
     }
 
 
@@ -259,7 +260,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
         if(border.get(border.size()-1).getX() <= 1832) {
             border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), border.get(border.size()-1).getX()+60, 780));
-            System.out.println("ADD");
         }
         //MID DIRT
         for(int i = 0; i < dirt1.size()-1; i++) {
@@ -268,27 +268,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             }
             if(dirt1.get(i).getX() < -120) {
                 dirt1.remove(i);
-                System.out.println("BORDER REMOVE");
             }
         }
         if(dirt1.get(dirt1.size()-1).getX() <= 1832) {
-            dirt1.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), dirt1.get(dirt1.size()-1).getX()+60, 780));
-            System.out.println("ADD");
+            dirt1.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), dirt1.get(dirt1.size()-1).getX()+60, 840));
         }
         //BOTTOM DIRT
         for(int i = 0; i < dirt2.size()-1; i++) {
             if(dirt2.get(i).getX() <=1140 && dirt2.get(i+1) == null) {
                 dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), WIDTH + 120, 900));
-                System.out.println("BORDER DIRT #2");
             }
             if(dirt2.get(i).getX() < -120) {
                 dirt2.remove(i);
-                System.out.println("BORDER REMOVE DIRT #2");
             }
         }
         if(dirt2.get(dirt2.size()-1).getX() <= 1832) {
-            dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), dirt2.get(dirt2.size()-1).getX()+60, 780));
-            System.out.println("ADD");
+            dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), dirt2.get(dirt2.size()-1).getX()+60, 900));
         }
 
         for(Border b: border)
@@ -336,4 +331,47 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
+    void handleTouch(MotionEvent m)
+    {
+        int pointerCount = m.getPointerCount();
+
+        for (int i = 0; i < pointerCount; i++)
+        {
+            int x = (int) m.getX(i);
+            int y = (int) m.getY(i);
+            int id = m.getPointerId(i);
+            int action = m.getActionMasked();
+            int actionIndex = m.getActionIndex();
+            String actionString;
+
+
+            switch (action)
+            {
+                case MotionEvent.ACTION_DOWN:
+                    actionString = "DOWN";
+                    break;
+                case MotionEvent.ACTION_UP:
+                    actionString = "UP";
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    actionString = "PNTR DOWN";
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    actionString = "PNTR UP";
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    actionString = "MOVE";
+                    break;
+                default:
+                    actionString = "";
+            }
+
+            String touchStatus = "Action: " + actionString + " Index: " + actionIndex + " ID: " + id + " X: " + x + " Y: " + y;
+
+            if (id == 0)
+                System.out.println("ID 0:"+touchStatus);
+            else
+                System.out.println("ID 1:"+touchStatus);
+        }
+    }
 }

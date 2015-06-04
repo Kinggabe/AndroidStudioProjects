@@ -1,0 +1,6 @@
+Delete Borders off Screen
+Dont allow Player to move left at start
+Auto Scroll??
+Ememy and BOsses
+AI for BOSSES
+Gravity
