@@ -175,7 +175,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             shootButton.update();
             if(leftButton.getPress()) {player.left = true;} else {player.left = false;}
             if(rightButton.getPress()) {player.right = true;} else {player.right = false;}
-            if(jumpButton.getPress()) {player.jumping = true;}
+            if(jumpButton.getPress()) {if(player.getY() == (HEIGHT-340)) {player.jumping = true;}}
             if(shootButton.getPress()) {
                 if(shootingStartTime == 1) {player.shooting = true;shootingStartTime++;}else{shootingStartTime++;if(shootingStartTime == 10) {shootingStartTime = 1;}}
             } else {player.shooting = false; shootingStartTime = 1;}

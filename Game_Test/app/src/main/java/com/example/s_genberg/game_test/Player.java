@@ -21,7 +21,7 @@ public class Player extends GameObject{
     private Animation animation = new Animation();
     private long startTime;
     private long jumpstartTime;
-    private Border borderhealth;
+    private HealthBar borderhealth;
     private ArrayList<bullets> Arraybullets;
     private Bitmap bullet;
     private Bitmap bulletexplode;
@@ -35,7 +35,7 @@ public class Player extends GameObject{
         width = w;
         health = 100;
         healthbar = healthB;
-        borderhealth = new Border(healthB[0], 800, 800);
+        borderhealth = new HealthBar(healthB[0], 800, 800);
         this.bullet = bullet;
         this.bulletexplode = bulletexplode;
         shooting = false;
@@ -61,21 +61,20 @@ public class Player extends GameObject{
             startTime = System.nanoTime();
         }
         if(jumping) {
-            if(y != 450) {
-                y-=10;
+            if(y != 535) {
+                y-=17;
             } else {
                 jumping = false;
-                y+=10;
+                y+=5;
             }
         }
         else {
             if(y <= 615) {
-                y+=10;
+                y+=5;
             }
         }
         animation.update();
         if(shooting) {
-            System.out.println("BUllet");
             Arraybullets.add(new bullets(bullet, bulletexplode, 9, 6, 4, x+87, y+88));
             shooting = false;
         }
@@ -120,6 +119,7 @@ public class Player extends GameObject{
             borderhealth.changeImage(healthbar[9]);
         } else if(health == 0) {
             borderhealth.changeImage(healthbar[10]);
+            setPlaying(false);
         }
         borderhealth.draw(canvas);
         for(bullets b: Arraybullets) {
@@ -136,6 +136,7 @@ public class Player extends GameObject{
     public int getDistanceTraveled() {return distanceTraveled;}
     public void setLeft(int l) {leftmax = l;}
     public void damaged() {health-=10; if(health < 0) {health = 0;}}
+    public int getHealth() {return health;}
 
 
 
