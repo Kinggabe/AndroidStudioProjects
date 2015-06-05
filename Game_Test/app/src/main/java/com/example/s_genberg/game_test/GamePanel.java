@@ -104,63 +104,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event)
     {
             handleTouch(event);
-        if(event.getAction()==MotionEvent.ACTION_DOWN) {
-            System.out.println("PRESS");
-            if(!player.getPlaying()) {
-                player.setPlaying(true);
-                if(event.getX() > 0 && event.getX() < 300) {
-                    if(event.getY() > 850) {
-                        leftButton.setPressed(true);
-                    }
-                }
-                if(event.getX() > 350 && event.getX() < 650) {
-                    if(event.getY() > 850) {
-                        rightButton.setPressed(true);
-                    }
-                }
-                if(event.getX() > 1555) {
-                    if(event.getY() > 850) {
-                        jumpButton.setPressed(true);
-                    }
-                }
-                if(event.getX() > 1630) {
-                    if(event.getY() < 800 && event.getY() > 570) {
-                        shootButton.setPressed(true);
-                    }
-                }
-            }
-            else {
-                if(event.getX() > 10 && event.getX() < 300) {
-                    if(event.getY() > 850) {
-                        leftButton.setPressed(true);
-                    }
-                }
-                if(event.getX() > 350 && event.getX() < 650) {
-                    if(event.getY() > 850) {
-                        rightButton.setPressed(true);
-                    }
-                }
-                if(event.getX() > 1555) {
-                    if(event.getY() > 850) {
-                        jumpButton.setPressed(true);
-                    }
-                }
-                if(event.getX() > 1630) {
-                    if(event.getY() < 800 && event.getY() > 570) {
-                        shootButton.setPressed(true);
-                    }
-                }
-            }
-            return true;
-        }
-        if(event.getAction()==MotionEvent.ACTION_UP) {
-                    leftButton.setPressed(false);
-                    rightButton.setPressed(false);
-                    jumpButton.setPressed(false);
-                    shootButton.setPressed(false);
-            return true;
-        }
-        return super.onTouchEvent(event);
+        return CheckCords(event);
     }
     public void update()
     {
@@ -329,7 +273,109 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         }
         newGameCreated = true;
     }
-
+    public boolean CheckCords(MotionEvent event) {
+            if(!player.getPlaying()) {
+                player.setPlaying(true);
+            }
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if(leftButton.checkPress(event.getX(), event.getY())) {
+                leftButton.setPressed(true);
+            }
+            /*
+            if (event.getX() > 0 && event.getX() < 300) {
+                if (event.getY() > 850) {
+                    leftButton.setPressed(true);
+                }
+            }
+            */
+            if (event.getX() > 350 && event.getX() < 650) {
+                if (event.getY() > 850) {
+                    rightButton.setPressed(true);
+                }
+            }
+            if (event.getX() > 1555) {
+                if (event.getY() > 850) {
+                    jumpButton.setPressed(true);
+                }
+            }
+            if (event.getX() > 1630) {
+                if (event.getY() < 800 && event.getY() > 570) {
+                    shootButton.setPressed(true);
+                }
+            }
+            return true;
+        } else if(event.getAction() == MotionEvent.ACTION_UP) {
+            if(event.getX() > 10 && event.getX() < 300) {
+                if(event.getY() > 850) {
+                    leftButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 350 && event.getX() < 650) {
+                if(event.getY() > 850) {
+                    rightButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 1555) {
+                if(event.getY() > 850) {
+                    jumpButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 1630) {
+                if(event.getY() < 800 && event.getY() > 570) {
+                    shootButton.setPressed(false);
+                }
+            }
+            return true;
+        }
+        if(event.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
+            /*
+            if (event.getX() > 0 && event.getX() < 300) {
+                if (event.getY() > 850) {
+                    leftButton.setPressed(true);
+                }
+            }
+            */
+            if (event.getX() > 350 && event.getX() < 650) {
+                if (event.getY() > 850) {
+                    rightButton.setPressed(true);
+                }
+            }
+            if (event.getX() > 1555) {
+                if (event.getY() > 850) {
+                    jumpButton.setPressed(true);
+                }
+            }
+            if (event.getX() > 1630) {
+                if (event.getY() < 800 && event.getY() > 570) {
+                    shootButton.setPressed(true);
+                }
+            }
+            return true;
+        } else if(event.getAction() == MotionEvent.ACTION_POINTER_UP) {
+            if(event.getX() > 10 && event.getX() < 300) {
+                if(event.getY() > 850) {
+                    leftButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 350 && event.getX() < 650) {
+                if(event.getY() > 850) {
+                    rightButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 1555) {
+                if(event.getY() > 850) {
+                    jumpButton.setPressed(false);
+                }
+            }
+            if(event.getX() > 1630) {
+                if(event.getY() < 800 && event.getY() > 570) {
+                    shootButton.setPressed(false);
+                }
+            }
+            return true;
+        }
+        return super.onTouchEvent(event);
+    }
 
     void handleTouch(MotionEvent m)
     {

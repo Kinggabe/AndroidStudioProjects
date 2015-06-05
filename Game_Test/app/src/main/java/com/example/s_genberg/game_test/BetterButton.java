@@ -46,4 +46,13 @@ public class BetterButton extends GameObject{
     public boolean getPress() {return pressed;}
     public void setVisible(boolean v) {Visible = v;}
     public void setPressed(boolean v) {pressed = v;}
+    public boolean checkPress(double xx, double yy) {
+        if(xx > x-5 && xx < x+width+5) {
+            if(yy < y+height+5 && yy > y-5) {
+               return true;
+            }
+        }
+        return false;
+    }
+
 }
