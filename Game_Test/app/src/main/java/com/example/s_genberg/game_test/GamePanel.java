@@ -277,6 +277,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             if(!player.getPlaying()) {
                 player.setPlaying(true);
             }
+        //leftButton.setPressed(false);
+        //rightButton.setPressed(false);
+        //shootButton.setPressed(false);
+        //jumpButton.setPressed(false);
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             if(leftButton.checkPress(event.getX(), event.getY())) {
                 leftButton.setPressed(true);
