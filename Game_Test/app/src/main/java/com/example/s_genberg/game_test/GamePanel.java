@@ -125,8 +125,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 e.update();
             }
             for(int i = 0; i < enemies.size(); i++) {
-                for(bullets b : player.Arraybullets) {
-                    if(collision(b, enemies.get(i))) {
+                for(int j = 0; j < player.Arraybullets.size(); j++) {
+                    if(collision(player.Arraybullets.get(i), enemies.get(i))) {
+                        player.Arraybullets.remove(i);
                         enemies.get(i).damaged();
                         if(enemies.get(i).getHeath() == 0) {
                             enemies.remove(i);
