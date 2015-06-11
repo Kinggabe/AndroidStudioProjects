@@ -22,9 +22,10 @@ public class Player extends GameObject{
     private long startTime;
     private long jumpstartTime;
     private HealthBar borderhealth;
-    private ArrayList<bullets> Arraybullets;
+    public ArrayList<bullets> Arraybullets;
     private Bitmap bullet;
     private Bitmap bulletexplode;
+    private boolean enemy = false;
 
     public Player(Bitmap res, int w, int h, int numFrames, Bitmap bullet, Bitmap bulletexplode, Bitmap[] healthB) {
         x = 100;
@@ -61,16 +62,17 @@ public class Player extends GameObject{
             startTime = System.nanoTime();
         }
         if(jumping) {
-            if(y != 535) {
-                y-=17;
+            System.out.println("JUMP");
+            if(y != 300) {
+                y-=20;
             } else {
                 jumping = false;
-                y+=5;
+                y+=10;
             }
         }
         else {
-            if(y <= 615) {
-                y+=5;
+            if(y != 560) {
+                y+=10;
             }
         }
         animation.update();
@@ -93,7 +95,6 @@ public class Player extends GameObject{
             } if(speed ==8) {
                 speed = 6;
             }
-            System.out.println("Speed:"+speed);
                 distanceTraveled-=1;
         } else if(!left) {
             speed = speed-2;
@@ -107,14 +108,15 @@ public class Player extends GameObject{
             } if(speed == -4) {
                 speed = -6;
             }
-
-            System.out.println("SPED"+speed);
             if(speed <= -6) {
                 speed = -6;
             }
             distanceTraveled+=1;
+            if(distanceTraveled == 400) {
+                enemy = true;
+                distanceTraveled = 0;
+            }
         } else if(!right){
-            System.out.println("N #");
             speed = speed+2;
             if(!left) {
                 if (speed >= 0) {
@@ -123,7 +125,6 @@ public class Player extends GameObject{
             }
         }
         GamePanel.MOVESPEED = speed;
-        System.out.println("Distance:"+distanceTraveled+" Speed:"+speed);
     }
     public void draw(Canvas canvas) {
         if(health == 100) {
@@ -166,8 +167,8 @@ public class Player extends GameObject{
     public void setLeft(int l) {leftmax = l;}
     public void damaged() {health-=10; if(health < 0) {health = 0;}}
     public int getHealth() {return health;}
-
-
+    public boolean getEnemy() {return enemy;}
+    public void setEnemy(boolean g) {enemy = g;}
 
 
 }

@@ -1,17 +1,16 @@
 package com.example.s_genberg.game_test;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-public class bullets extends GameObject{
+public class enemy_bullets extends GameObject{
     private Bitmap spritesheet;
     private Animation animation = new Animation();
     private int speed;
     private boolean Visible;
     private boolean hit;
     private Bitmap res;
-    public bullets(Bitmap res, Bitmap hitres, int w, int h, int numFrames, int x, int y) {
+    public enemy_bullets(Bitmap res, Bitmap hitres, int w, int h, int numFrames, int x, int y) {
       width = w;
       height = h;
       this.x = x;
