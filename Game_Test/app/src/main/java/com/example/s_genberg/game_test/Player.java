@@ -112,7 +112,8 @@ public class Player extends GameObject{
                 speed = -6;
             }
             distanceTraveled+=1;
-            if(distanceTraveled == 400) {
+            System.out.println("Distance:"+distanceTraveled);
+            if(distanceTraveled == 200) {
                 enemy = true;
                 distanceTraveled = 0;
             }
@@ -165,10 +166,11 @@ public class Player extends GameObject{
     public void setDistanceTraveled(int j) {distanceTraveled = j;}
     public int getDistanceTraveled() {return distanceTraveled;}
     public void setLeft(int l) {leftmax = l;}
-    public void damaged() {health-=10; if(health < 0) {health = 0;}}
+    public void damaged() {health-=5; if(health < 0) {health = 0;}}
     public int getHealth() {return health;}
     public boolean getEnemy() {return enemy;}
     public void setEnemy(boolean g) {enemy = g;}
-
+    public void resetHealth() {health = 100;}
+    public void bullet(int b) {Arraybullets.remove(b);}
 
 }

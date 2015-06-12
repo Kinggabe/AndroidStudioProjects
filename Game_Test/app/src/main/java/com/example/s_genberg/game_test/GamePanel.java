@@ -23,6 +23,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private BetterButton rightButton;
     private BetterButton jumpButton;
     private BetterButton shootButton;
+    private BetterButton resetButton;
     private ArrayList<Border> border;
     private ArrayList<Border> dirt2;
     private ArrayList<Border> dirt1;
@@ -30,9 +31,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap[] healthbar;
     private Random rand = new Random();
     private boolean newGameCreated;
+    private boolean reset = false;
     //increase to slow down difficulty progression, decrease to speed up difficulty progression
     private int progressDenom = 20;
-
 
     public GamePanel(Context context) {
         super(context);
@@ -91,7 +92,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         rightButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.right), BitmapFactory.decodeResource(getResources(), R.drawable.rightpress), 300, 150, 1, 350, 800);
         jumpButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.jump), BitmapFactory.decodeResource(getResources(), R.drawable.jumppress), 300, 150, 1, 1400, 800);
         shootButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.shoot), BitmapFactory.decodeResource(getResources(), R.drawable.shootpress), 200, 200, 1, 1480, 550);
-
+        resetButton = new BetterButton(BitmapFactory.decodeResource(getResources(), R.drawable.resetfade), BitmapFactory.decodeResource(getResources(), R.drawable.resetpress), 1712, 960, 1, 0, 0);
         shootingStartTime = 1;
 
         //we can safely start the game loop
@@ -108,17 +109,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         if (player.getPlaying()) {
+            reset = false;
             bg.update();
             player.update();
             leftButton.update();
             rightButton.update();
             jumpButton.update();
             shootButton.update();
-
+            resetButton.update();
+            System.out.println("Score:"+player.getScore());
             if(player.getEnemy()) {
                    enemies.add(new EnemyBase(BitmapFactory.decodeResource(getResources(), R.drawable.enemies_main), 162, 220, 6,//alter 1 later
                            BitmapFactory.decodeResource(getResources(), R.drawable.enemybullet), BitmapFactory.decodeResource(getResources(), R.drawable.bullethit)));
-                System.out.println("ENEMY");
                 player.setEnemy(false);
             }
             for (EnemyBase e : enemies) {
@@ -127,7 +129,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             for(int i = 0; i < enemies.size(); i++) {
                 for(int j = 0; j < player.Arraybullets.size(); j++) {
                     if(collision(player.Arraybullets.get(i), enemies.get(i))) {
-                        player.Arraybullets.remove(i);
+                        //player.Arraybullets.remove(i);
+                        player.bullet(i);
                         enemies.get(i).damaged();
                         if(enemies.get(i).getHeath() == 0) {
                             enemies.remove(i);
@@ -180,6 +183,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             //BORDERS AKA Ground !! !! !!  !!  !!  !!  !!  !!  !! !!
             this.Updateborder();
         } else {
+            reset = true;
+            if (resetButton.getPress()) {
+                newGame();
+            }
             player.right = false;
             newGameCreated = false;
             if (!newGameCreated) {
@@ -187,14 +194,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-
     public boolean collision(GameObject a, GameObject b) {
         if (Rect.intersects(a.getRectangle(), b.getRectangle())) {
             return true;
         }
         return false;
     }
-
     @Override
     public void draw(Canvas canvas) {
         final float scaleFactorX = getWidth() / (WIDTH * 1.f);
@@ -222,6 +227,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 e.draw(canvas);
             }
             player.draw(canvas);
+            if(reset) {
+                resetButton.draw(canvas);
+            }
             canvas.restoreToCount(savedState);
         }
 
@@ -277,11 +285,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         border.clear();
         dirt1.clear();
         dirt2.clear();
+        enemies.clear();
 
         player.resetSpeed();
         player.resetScore();
+        player.resetHealth();
         player.setY(HEIGHT - 400);
-
         //initial border
         for (int i = 0; i * 20 < WIDTH + 60; i++) {
             //first top border create
@@ -289,7 +298,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), i * 60, 780));
                 dirt1.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), i * 60, 840));
                 dirt2.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), i * 60, 900));
-                System.out.println("STARTBORDER");
+                System.out.println("PREP");
             } else {
                 border.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.grassmedium), i * 60, 780));
                 dirt1.add(new Border(BitmapFactory.decodeResource(getResources(), R.drawable.dirtmedium), i * 60, 840));
@@ -307,8 +316,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         rightButton.setPressed(false);
         shootButton.setPressed(false);
         jumpButton.setPressed(false);
+        resetButton.setPressed(false);
         int[] KKK = handleTouch(event);
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if(reset) {
+                if (KKK[2] > 330 && KKK[2] < 630) {
+                    if (KKK[3] > 431 && KKK[3] < 1281) {
+                        leftButton.setPressed(true);
+                    }
+                }
+            }
             if (KKK[2] > 0 && KKK[2] < 300) {
                 if (KKK[3] > 850) {
                     leftButton.setPressed(true);
@@ -331,24 +348,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
             return true;
         } else if(event.getAction() == MotionEvent.ACTION_UP) {
+            if(reset) {
+                if (KKK[2] > 330 && KKK[2] < 630) {
+                    if (KKK[3] > 431 && KKK[3] < 1281) {
+                        leftButton.setPressed(false);
+                    }
+                }
+            }
             if (KKK[2] > 0 && KKK[2] < 300) {
                 if (KKK[3] > 850) {
-                    leftButton.setPressed(true);
+                    leftButton.setPressed(false);
                 }
             }
             if (KKK[2] > 350 && KKK[2] < 650) {
                 if (KKK[3] > 850) {
-                    rightButton.setPressed(true);
+                    rightButton.setPressed(false);
                 }
             }
             if (KKK[2] > 1555) {
                 if (KKK[3] > 850) {
-                    jumpButton.setPressed(true);
+                    jumpButton.setPressed(false);
                 }
             }
             if (KKK[2] > 1630) {
                 if (KKK[3] < 800 && KKK[3] > 570) {
-                    shootButton.setPressed(true);
+                    shootButton.setPressed(false);
                 }
             }
             return true;
